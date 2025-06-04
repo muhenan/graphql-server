@@ -21,3 +21,26 @@ type Query {
     actor(id: ID!): Actor
     actors: [Actor]
 }
+
+# Input type
+input MovieInput {
+    title: String!
+    releaseYear: Int
+    director: String
+    genre: String
+    rating: Float
+    actorIds: [ID!]
+}
+
+# Response type
+type MovieResponse {
+    success: Boolean!
+    message: String
+    movie: Movie
+}
+
+type Mutation {
+    createMovie(input: MovieInput!): MovieResponse!
+    updateMovie(id: ID!, input: MovieInput!): MovieResponse!
+    deleteMovie(id: ID!): MovieResponse!
+}

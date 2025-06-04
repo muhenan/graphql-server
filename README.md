@@ -6,6 +6,7 @@ A GraphQL server built with Spring Boot and Netflix DGS (Domain Graph Service) t
 
 - Movie queries with details like title, director, genre, and rating
 - Actor queries with basic information
+- Movie mutations (create, update, delete)
 - Sample data for demonstration purposes
 
 ## Technology Stack
@@ -22,6 +23,8 @@ src/main/
 ├── java/com/henan/graphqlserver/
 │   ├── model/
 │   │   ├── Movie.java
+│   │   ├── MovieInput.java
+│   │   ├── MovieResponse.java
 │   │   └── Actor.java
 │   └── datafetchers/
 │       ├── MovieDatafetcher.java
@@ -48,6 +51,19 @@ The server provides the following main types:
 - id: ID!
 - name: String!
 - birthYear: Int
+
+### MovieInput
+- title: String!
+- releaseYear: Int
+- director: String
+- genre: String
+- rating: Float
+- actorIds: [ID!]
+
+### MovieResponse
+- success: Boolean!
+- message: String
+- movie: Movie
 
 ## Available Queries
 
@@ -101,6 +117,59 @@ query {
   actor(id: "1") {
     name
     birthYear
+  }
+}
+```
+
+## Available Mutations
+
+```graphql
+# Create a new movie
+mutation {
+  createMovie(input: {
+    title: "Inception",
+    releaseYear: 2010,
+    director: "Christopher Nolan",
+    genre: "Sci-Fi",
+    rating: 8.8,
+    actorIds: ["1", "2"]
+  }) {
+    success
+    message
+    movie {
+      id
+      title
+      director
+      actors {
+        name
+      }
+    }
+  }
+}
+
+# Update a movie
+mutation {
+  updateMovie(
+    id: "1",
+    input: {
+      title: "The Shawshank Redemption (Updated)",
+      rating: 9.5
+    }
+  ) {
+    success
+    message
+    movie {
+      title
+      rating
+    }
+  }
+}
+
+# Delete a movie
+mutation {
+  deleteMovie(id: "1") {
+    success
+    message
   }
 }
 ```
