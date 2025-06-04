@@ -218,3 +218,73 @@ The server comes with sample data including:
    ./gradlew bootRun
    ```
 4. Access the GraphQL playground at `http://localhost:8080/graphiql`
+
+## Future Work
+
+### Relay-Style Connection Pattern
+The server could be enhanced with Relay-style connection pattern, which provides a standardized way to handle pagination and relationships in GraphQL. This pattern would include:
+
+1. **Connection Types**
+   - `MovieConnection`: Contains edges, pageInfo, and totalCount
+   - `MovieEdge`: Contains a node (the actual movie) and a cursor
+   - `PageInfo`: Contains pagination metadata (hasNextPage, hasPreviousPage, etc.)
+
+2. **Type Definitions**
+   ```graphql
+   # Connection type for paginated movie results
+   type MovieConnection {
+       edges: [MovieEdge!]!    # List of edges containing movies
+       pageInfo: PageInfo!     # Pagination metadata
+       totalCount: Int!        # Total number of movies
+   }
+
+   # Edge type containing a movie and its cursor
+   type MovieEdge {
+       node: Movie!            # The actual movie object
+       cursor: String!         # Cursor for pagination
+   }
+
+   # Pagination metadata
+   type PageInfo {
+       hasNextPage: Boolean!           # Whether there are more pages
+       hasPreviousPage: Boolean!       # Whether there are previous pages
+       startCursor: String             # Cursor for the first item
+       endCursor: String               # Cursor for the last item
+   }
+   ```
+
+3. **Benefits**
+   - Cursor-based pagination for better performance
+   - Consistent structure across the API
+   - Rich metadata for UI development
+   - Support for bi-directional pagination
+
+4. **Example Implementation**
+   ```graphql
+   # Query with pagination
+   query {
+     movies(first: 2) {
+       edges {
+         node {
+           id
+           title
+           director
+         }
+         cursor
+       }
+       pageInfo {
+         hasNextPage
+         hasPreviousPage
+         startCursor
+         endCursor
+       }
+       totalCount
+     }
+   }
+   ```
+
+5. **Planned Features**
+   - Cursor-based pagination for all list queries
+   - Support for bi-directional navigation
+   - Integration with filtering system
+   - Performance optimizations for large datasets
