@@ -1,9 +1,6 @@
 package com.henan.graphqlserver.datafetchers;
 
-import com.henan.graphqlserver.model.Movie;
-import com.henan.graphqlserver.model.Actor;
-import com.henan.graphqlserver.model.MovieInput;
-import com.henan.graphqlserver.model.MovieResponse;
+import com.henan.graphqlserver.model.*;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.DgsMutation;
@@ -141,5 +138,48 @@ public class MovieDatafetcher {
         } catch (Exception e) {
             return new MovieResponse(false, "Failed to delete movie: " + e.getMessage(), null);
         }
+    }
+
+    @DgsQuery
+    public List<Movie> searchMovies(@InputArgument MovieFilter filter) {
+        if (filter == null) {
+            return movies;
+        }
+
+        return movies.stream()
+                .filter(movie -> {
+                    // Title filter (case-insensitive contains)
+                    if (filter.getTitle() != null && !filter.getTitle().isEmpty()) {
+                        if (!movie.getTitle().toLowerCase().contains(filter.getTitle().toLowerCase())) {
+                            return false;
+                        }
+                    }
+
+                    // Genre filter (case-insensitive exact match)
+                    if (filter.getGenre() != null && !filter.getGenre().isEmpty()) {
+                        if (!movie.getGenre().equalsIgnoreCase(filter.getGenre())) {
+                            return false;
+                        }
+                    }
+
+                    // Rating range filter
+                    if (filter.getMinRating() != null && movie.getRating() < filter.getMinRating()) {
+                        return false;
+                    }
+                    if (filter.getMaxRating() != null && movie.getRating() > filter.getMaxRating()) {
+                        return false;
+                    }
+
+                    // Release year range filter
+                    if (filter.getReleaseYearFrom() != null && movie.getReleaseYear() < filter.getReleaseYearFrom()) {
+                        return false;
+                    }
+                    if (filter.getReleaseYearTo() != null && movie.getReleaseYear() > filter.getReleaseYearTo()) {
+                        return false;
+                    }
+
+                    return true;
+                })
+                .collect(Collectors.toList());
     }
 }

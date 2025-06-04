@@ -7,6 +7,7 @@ A GraphQL server built with Spring Boot and Netflix DGS (Domain Graph Service) t
 - Movie queries with details like title, director, genre, and rating
 - Actor queries with basic information
 - Movie mutations (create, update, delete)
+- Movie filtering by title, genre, rating, and release year
 - Sample data for demonstration purposes
 
 ## Technology Stack
@@ -25,6 +26,7 @@ src/main/
 │   │   ├── Movie.java
 │   │   ├── MovieInput.java
 │   │   ├── MovieResponse.java
+│   │   ├── MovieFilter.java
 │   │   └── Actor.java
 │   └── datafetchers/
 │       ├── MovieDatafetcher.java
@@ -65,6 +67,14 @@ The server provides the following main types:
 - message: String
 - movie: Movie
 
+### MovieFilter
+- title: String
+- genre: String
+- minRating: Float
+- maxRating: Float
+- releaseYearFrom: Int
+- releaseYearTo: Int
+
 ## Available Queries
 
 ```graphql
@@ -100,6 +110,22 @@ query {
     title
     director
     rating
+  }
+}
+
+# Search movies with filters
+query {
+  searchMovies(filter: {
+    title: "shawshank",
+    genre: "Drama",
+    minRating: 9.0,
+    releaseYearFrom: 1990
+  }) {
+    title
+    director
+    genre
+    rating
+    releaseYear
   }
 }
 

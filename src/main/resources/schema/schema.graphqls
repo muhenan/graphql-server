@@ -20,6 +20,7 @@ type Query {
     moviesByGenre(genre: String!): [Movie]
     actor(id: ID!): Actor
     actors: [Actor]
+    searchMovies(filter: MovieFilter): [Movie]
 }
 
 # Input type
@@ -43,4 +44,13 @@ type Mutation {
     createMovie(input: MovieInput!): MovieResponse!
     updateMovie(id: ID!, input: MovieInput!): MovieResponse!
     deleteMovie(id: ID!): MovieResponse!
+}
+
+input MovieFilter {
+    title: String
+    genre: String
+    minRating: Float
+    maxRating: Float
+    releaseYearFrom: Int
+    releaseYearTo: Int
 }
