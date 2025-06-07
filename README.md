@@ -39,7 +39,8 @@ src/
 └── test/
     └── java/com/henan/graphqlserver/
         └── datafetchers/
-            └── MovieDatafetcherTest.java
+            ├── MovieDatafetcherTest.java
+            └── ActorDatafetcherTest.java
 ```
 
 ## GraphQL Schema
@@ -237,6 +238,11 @@ The project includes comprehensive unit tests built with JUnit 5 to ensure code 
   - Edge cases: Invalid IDs, null filters, empty results
   - Filter combinations: Title, genre, rating range, release year range
 
+- **ActorDatafetcher Tests**: Comprehensive test suite for actor operations
+  - Query operations: `actors()`, `actor(id)`
+  - Edge cases: Invalid IDs, null/empty IDs
+  - Data consistency and validation across multiple calls
+
 ### Running Tests
 
 ```bash
@@ -248,6 +254,7 @@ The project includes comprehensive unit tests built with JUnit 5 to ensure code 
 
 # Run specific test class
 ./gradlew test --tests MovieDatafetcherTest
+./gradlew test --tests ActorDatafetcherTest
 ```
 
 ### Test Structure
@@ -256,7 +263,8 @@ The project includes comprehensive unit tests built with JUnit 5 to ensure code 
 src/test/
 └── java/com/henan/graphqlserver/
     └── datafetchers/
-        └── MovieDatafetcherTest.java
+        ├── MovieDatafetcherTest.java
+        └── ActorDatafetcherTest.java
 ```
 
 The tests use JUnit 5 assertions and follow best practices for unit testing, including:
