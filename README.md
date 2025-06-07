@@ -8,6 +8,7 @@ A GraphQL server built with Spring Boot and Netflix DGS (Domain Graph Service) t
 - Actor queries with basic information
 - Movie mutations (create, update, delete)
 - Movie filtering by title, genre, rating, and release year
+- Comprehensive unit test coverage
 - Sample data for demonstration purposes
 
 ## Technology Stack
@@ -20,20 +21,25 @@ A GraphQL server built with Spring Boot and Netflix DGS (Domain Graph Service) t
 ## Project Structure
 
 ```
-src/main/
-├── java/com/henan/graphqlserver/
-│   ├── model/
-│   │   ├── Movie.java
-│   │   ├── MovieInput.java
-│   │   ├── MovieResponse.java
-│   │   ├── MovieFilter.java
-│   │   └── Actor.java
-│   └── datafetchers/
-│       ├── MovieDatafetcher.java
-│       └── ActorDatafetcher.java
-└── resources/
-    └── schema/
-        └── schema.graphqls
+src/
+├── main/
+│   ├── java/com/henan/graphqlserver/
+│   │   ├── model/
+│   │   │   ├── Movie.java
+│   │   │   ├── MovieInput.java
+│   │   │   ├── MovieResponse.java
+│   │   │   ├── MovieFilter.java
+│   │   │   └── Actor.java
+│   │   └── datafetchers/
+│   │       ├── MovieDatafetcher.java
+│   │       └── ActorDatafetcher.java
+│   └── resources/
+│       └── schema/
+│           └── schema.graphqls
+└── test/
+    └── java/com/henan/graphqlserver/
+        └── datafetchers/
+            └── MovieDatafetcherTest.java
 ```
 
 ## GraphQL Schema
@@ -218,6 +224,46 @@ The server comes with sample data including:
    ./gradlew bootRun
    ```
 4. Access the GraphQL playground at `http://localhost:8080/graphiql`
+
+## Testing
+
+The project includes comprehensive unit tests built with JUnit 5 to ensure code quality and reliability.
+
+### Test Coverage
+
+- **MovieDatafetcher Tests**: Complete test suite covering all query and mutation operations
+  - Query operations: `movies()`, `movie(id)`, `moviesByGenre()`, `searchMovies()`
+  - Mutation operations: `createMovie()`, `updateMovie()`, `deleteMovie()`
+  - Edge cases: Invalid IDs, null filters, empty results
+  - Filter combinations: Title, genre, rating range, release year range
+
+### Running Tests
+
+```bash
+# Run all tests
+./gradlew test
+
+# Run tests with more verbose output
+./gradlew test --info
+
+# Run specific test class
+./gradlew test --tests MovieDatafetcherTest
+```
+
+### Test Structure
+
+```
+src/test/
+└── java/com/henan/graphqlserver/
+    └── datafetchers/
+        └── MovieDatafetcherTest.java
+```
+
+The tests use JUnit 5 assertions and follow best practices for unit testing, including:
+- Proper setup and teardown with `@BeforeEach`
+- Descriptive test names with `@DisplayName`
+- Comprehensive assertions for all expected outcomes
+- Edge case validation
 
 ## Future Work
 
